@@ -1,15 +1,24 @@
+import * as babylonjs from "babylonjs";
+
 class Game {
 
     /** @type HTMLCanvasElement */
     _canvas = null;
+
+    /** @type BABYLON.Engine */
+    _engine = null;
 
     /**
      * @param canvas { HTMLCanvasElement }
      */
     constructor(canvas) {
 
+        // Init canvas element.
         this._canvas = canvas;
         this._setCanvasSizeToParent();
+
+        // Init of babylon engine.
+        this._engine = new BABYLON.Engine(canvas, true);
 
         // Resizes the canvas element to the parent
         // when the browser changes size.
