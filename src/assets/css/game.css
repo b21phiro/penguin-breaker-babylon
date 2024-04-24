@@ -1,0 +1,10 @@
+.game {
+    position: relative;
+    flex: 1;
+}
+
+#PenguinBreakerCanvas {
+    position: absolute;
+    inset: 0;
+    background-color: black;
+}

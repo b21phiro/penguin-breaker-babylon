@@ -1,0 +1,22 @@
+#app {
+    margin: auto;
+    max-width: var(--app-max-width);
+    min-height: 100vh;
+    flex-direction: column;
+}
+
+.app-main {
+    flex: 1;
+    padding-inline: var(--app-site-padding);
+}
+
+.app-header,
+.app-footer {
+    padding: var(--app-site-padding);
+    text-align: center;
+}
+
+#app,
+.app-main {
+    display: flex;
+}

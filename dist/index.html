@@ -6,9 +6,19 @@
     <meta name="keywords" content="Penguin, Breaker, Game, Babylon">
     <meta name="author" content="Philip Rosenqvist">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= htmlWebpackPlugin.options.title %></title>
+    <title>Penguin Breaker</title>
 <script defer src="main.bundle.js"></script></head>
 <body>
-    <div id="root"></div>
+    <div id="app">
+        <header class="app-header">
+            <h1 class="logotype">Penguin Breaker</h1>
+        </header>
+        <main class="app-main">
+            <section id="game" class="game"></section>
+        </main>
+        <footer class="app-footer">
+            <p>Github <a href="https://github.com/b21phiro" title="Github @b21phiro">@b21phiro</a></p>
+        </footer>
+    </div>
 </body>
 </html>
