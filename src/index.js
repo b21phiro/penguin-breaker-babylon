@@ -6,4 +6,7 @@ window.onload = (ev) => {
     // Init game.
     const game = GameBoot.boot('game');
 
+    // Play the game.
+    game.play();
+
 };
