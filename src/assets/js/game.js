@@ -15,6 +15,9 @@ class Game {
     /** @type Board */
     _board = null;
 
+    /** @type BABYLON.ArcRotateCamera */
+    _camera = null;
+
     /**
      * @param canvas { HTMLCanvasElement }
      */
@@ -63,30 +66,46 @@ class Game {
         const canvas = this._canvas;
 
         // Creates a basic Babylon Scene object
-        const scene = new BABYLON.Scene(engine);
+        this._scene = new BABYLON.Scene(engine);
 
-        // Creates and positions a free camera
-        const camera = new BABYLON.FreeCamera("camera1",
-            new BABYLON.Vector3(0, 5, -15), scene);
-
-        // Targets the camera to scene origin
-        camera.setTarget(BABYLON.Vector3.Zero());
-
-        // This attaches the camera to the canvas
-        camera.attachControl(canvas, true);
+        // Init the camera for the scene.
+        this._initSceneCamera();
 
         // Creates a light, aiming 0,1,0 - to the sky
         const light = new BABYLON.HemisphericLight("light",
-            new BABYLON.Vector3(0, 1, 0), scene);
+            new BABYLON.Vector3(0, 1, 0), this._scene);
 
         // Dim the light a small amount - 0 to 1
         light.intensity = 0.7;
 
-        // Load in the board meshes.
+        // Creates the board mesh.
         this._board.initBoardMeshes(this._scene);
 
-        // Delegate scene.
-        this._scene = scene;
+    }
+
+    _initSceneCamera() {
+
+        // Check that we got everything.
+        if (!this._scene || !this._canvas) {
+            console.error(`Missing scene or canvas, can't prepare the camera without them!`);
+            return;
+        }
+
+        // Creates and positions a free camera
+        this._camera = new BABYLON.ArcRotateCamera("Camera",
+            -Math.PI / 2,
+            Math.PI / 2,
+            20,
+            new BABYLON.Vector3(
+                0,
+                4.5,
+                0
+            ),
+            this._scene
+        );
+
+        // Less fish-eye.
+        this._camera.fov = 0.5;
 
     }
 
