@@ -1,4 +1,5 @@
 import * as BABYLON from 'babylonjs';
+import {Board} from "./board";
 
 class Game {
 
@@ -11,6 +12,9 @@ class Game {
     /** @type BABYLON.Scene */
     _scene = null;
 
+    /** @type Board */
+    _board = null;
+
     /**
      * @param canvas { HTMLCanvasElement }
      */
@@ -22,6 +26,9 @@ class Game {
 
         // Init of babylon engine.
         this._engine = new BABYLON.Engine(canvas, true);
+
+        // The board or the cave in which the game takes place in.
+        this._board = new Board();
 
         // Resizes the canvas element to the parent
         // when the browser changes size.
@@ -60,7 +67,7 @@ class Game {
 
         // Creates and positions a free camera
         const camera = new BABYLON.FreeCamera("camera1",
-            new BABYLON.Vector3(0, 5, -10), scene);
+            new BABYLON.Vector3(0, 5, -15), scene);
 
         // Targets the camera to scene origin
         camera.setTarget(BABYLON.Vector3.Zero());
@@ -75,16 +82,8 @@ class Game {
         // Dim the light a small amount - 0 to 1
         light.intensity = 0.7;
 
-        // Built-in 'sphere' shape.
-        const sphere = BABYLON.MeshBuilder.CreateSphere("sphere",
-            {diameter: 2, segments: 32}, scene);
-
-        // Move the sphere upward 1/2 its height
-        sphere.position.y = 1;
-
-        // Built-in 'ground' shape.
-        const ground = BABYLON.MeshBuilder.CreateGround("ground",
-            {width: 6, height: 6}, scene);
+        // Load in the board meshes.
+        this._board.initBoardMeshes(this._scene);
 
         // Delegate scene.
         this._scene = scene;
