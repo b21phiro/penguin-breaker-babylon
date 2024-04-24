@@ -1,6 +1,14 @@
 import * as BABYLON from 'babylonjs';
 import {Board} from "./board";
 
+// Images for the skybox.
+import '../images/skybox/skybox_nz.jpg';
+import '../images/skybox/skybox_nx.jpg';
+import '../images/skybox/skybox_ny.jpg';
+import '../images/skybox/skybox_px.jpg';
+import '../images/skybox/skybox_py.jpg';
+import '../images/skybox/skybox_pz.jpg';
+
 class Game {
 
     /** @type HTMLCanvasElement */
@@ -17,6 +25,9 @@ class Game {
 
     /** @type BABYLON.ArcRotateCamera */
     _camera = null;
+
+    /** @type BABYLON.HemisphericLight */
+    _light = null;
 
     /**
      * @param canvas { HTMLCanvasElement }
@@ -58,29 +69,11 @@ class Game {
     }
 
     _createGameScene() {
-
-        // Init of the engine.
-        const engine = this._engine;
-
-        // Init of canvas.
-        const canvas = this._canvas;
-
-        // Creates a basic Babylon Scene object
-        this._scene = new BABYLON.Scene(engine);
-
-        // Init the camera for the scene.
+        this._scene = new BABYLON.Scene(this._engine);
         this._initSceneCamera();
-
-        // Creates a light, aiming 0,1,0 - to the sky
-        const light = new BABYLON.HemisphericLight("light",
-            new BABYLON.Vector3(0, 1, 0), this._scene);
-
-        // Dim the light a small amount - 0 to 1
-        light.intensity = 0.7;
-
-        // Creates the board mesh.
+        this._initSceneLight();
+        this._initSceneSkybox();
         this._board.initBoardMeshes(this._scene);
-
     }
 
     _initSceneCamera() {
@@ -107,6 +100,30 @@ class Game {
         // Less fish-eye.
         this._camera.fov = 0.5;
 
+    }
+
+    _initSceneLight() {
+        this._light = new BABYLON.HemisphericLight("Light",
+            new BABYLON.Vector3(0, .5, -5),
+            this._scene
+        );
+        this._light.intensity = 1.0;
+    }
+
+    _initSceneSkybox() {
+        const skybox = BABYLON.MeshBuilder.CreateBox("Sky",
+            { size: 100.0 },
+            this._scene
+        );
+        const skyboxMaterial = new BABYLON.StandardMaterial("Sky", this._scene);
+        skyboxMaterial.backFaceCulling = false;
+        skyboxMaterial.disableLighting = true;
+        skybox.infiniteDistance = true;
+        // Files are in dist/images/skybox/skybox_[name].[ext]
+        // due to how webpack does things.
+        skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("images/skybox/skybox", this._scene);
+        skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
+        skybox.material = skyboxMaterial;
     }
 
 }

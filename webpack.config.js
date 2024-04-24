@@ -15,6 +15,17 @@ module.exports = {
                 test: /\.css$/i,
                 use: ['style-loader', 'css-loader'],
             },
+            {
+                test: /\.(png|svg|jpg|jpeg|gif)$/i,
+                type: 'asset/resource',
+            },
+            {
+                test: /skybox_(nx|ny|nz|px|py|pz)\.(png|jpg|jpeg|gif)$/i,
+                type: 'asset/resource',
+                generator : {
+                    filename : 'images/skybox/[name][ext][query]',
+                }
+            },
         ],
     },
     plugins: [
