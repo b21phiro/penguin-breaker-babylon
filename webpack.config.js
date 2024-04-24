@@ -26,6 +26,19 @@ module.exports = {
                     filename : 'images/skybox/[name][ext][query]',
                 }
             },
+            {
+                test: /\.(glb|gltf)$/i,
+                use:
+                    [
+                        {
+                            loader: 'file-loader',
+                            options: {
+                                outputPath: 'models/',
+                                name: '[name].[ext]'
+                            }
+                        }
+                    ]
+            },
         ],
     },
     plugins: [

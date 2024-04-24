@@ -67,6 +67,14 @@ class Board {
 
     }
 
+    getFloor() {
+        return this._root.getChildMeshes().find(_mesh => _mesh.name === 'BottomWall');
+    }
+
+    getFloorPositionY() {
+        return this.getFloor()._boundingInfo.boundingBox.maximum.y;
+    }
+
 }
 
 export { Board };

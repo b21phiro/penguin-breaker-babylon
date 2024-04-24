@@ -1,5 +1,7 @@
 import * as BABYLON from 'babylonjs';
+import 'babylonjs-loaders';
 import {Board} from "./board";
+import {Player} from "./player";
 
 // Images for the skybox.
 import '../images/skybox/skybox_nz.jpg';
@@ -8,6 +10,9 @@ import '../images/skybox/skybox_ny.jpg';
 import '../images/skybox/skybox_px.jpg';
 import '../images/skybox/skybox_py.jpg';
 import '../images/skybox/skybox_pz.jpg';
+
+// GLB files.
+import '../models/PlayerModel.glb';
 
 class Game {
 
@@ -29,6 +34,9 @@ class Game {
     /** @type BABYLON.HemisphericLight */
     _light = null;
 
+    /** @type Player */
+    player = null;
+
     /**
      * @param canvas { HTMLCanvasElement }
      */
@@ -44,6 +52,8 @@ class Game {
         // The board or the cave in which the game takes place in.
         this._board = new Board();
 
+        this.player = new Player();
+
         // Resizes the canvas element to the parent
         // when the browser changes size.
         window.onresize = (ev) => {
@@ -53,8 +63,10 @@ class Game {
     }
 
     play() {
-        this._createGameScene();
-        this._engine.runRenderLoop(() => this._loop());
+        this._createGameScene().then(() => {
+            this.resetPositions();
+            this._engine.runRenderLoop(() => this._loop());
+        });
     }
 
     _loop() {
@@ -68,12 +80,13 @@ class Game {
         this._canvas.height = parentElement.offsetWidth / aspectRatio;
     }
 
-    _createGameScene() {
+    async _createGameScene() {
         this._scene = new BABYLON.Scene(this._engine);
         this._initSceneCamera();
         this._initSceneLight();
         this._initSceneSkybox();
         this._board.initBoardMeshes(this._scene);
+        await this.player.initPlayerMeshAsync(this._scene);
     }
 
     _initSceneCamera() {
@@ -124,6 +137,17 @@ class Game {
         skyboxMaterial.reflectionTexture = new BABYLON.CubeTexture("images/skybox/skybox", this._scene);
         skyboxMaterial.reflectionTexture.coordinatesMode = BABYLON.Texture.SKYBOX_MODE;
         skybox.material = skyboxMaterial;
+    }
+
+    resetPositions() {
+
+        // Set player centered on the board.
+        this.player._mesh[0].position = new BABYLON.Vector3(
+            0,
+            this._board.getFloorPositionY(),
+            0
+        );
+
     }
 
 }

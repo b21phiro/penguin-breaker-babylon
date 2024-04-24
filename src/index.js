@@ -1,7 +1,7 @@
 import './main.css';
 import { GameBoot } from "./assets/js/boot";
 
-window.onload = (ev) => {
+window.onload = async (ev) => {
 
     // Init game.
     const game = GameBoot.boot('game');
