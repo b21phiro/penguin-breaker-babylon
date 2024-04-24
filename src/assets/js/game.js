@@ -13,6 +13,8 @@ import '../images/skybox/skybox_pz.jpg';
 
 // GLB files.
 import '../models/PlayerModel.glb';
+import {CanMove} from "./canMove";
+import {CanNotMove} from "./canNotMove";
 
 class Game {
 
@@ -52,8 +54,6 @@ class Game {
         // The board or the cave in which the game takes place in.
         this._board = new Board();
 
-        this.player = new Player();
-
         // Resizes the canvas element to the parent
         // when the browser changes size.
         window.onresize = (ev) => {
@@ -64,8 +64,13 @@ class Game {
 
     play() {
         this._createGameScene().then(() => {
+
+            // Scene is ready.
+
             this.resetPositions();
+
             this._engine.runRenderLoop(() => this._loop());
+
         });
     }
 
@@ -86,7 +91,12 @@ class Game {
         this._initSceneLight();
         this._initSceneSkybox();
         this._board.initBoardMeshes(this._scene);
-        await this.player.initPlayerMeshAsync(this._scene);
+
+        // Init Player
+        this.player =
+            new Player(this._scene, new CanMove(this._scene));
+            await this.player._initMeshAsync();
+
     }
 
     _initSceneCamera() {
