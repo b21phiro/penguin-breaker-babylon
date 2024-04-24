@@ -21,10 +21,10 @@ class Board {
         leftWall = BABYLON.MeshBuilder.CreateBox("LeftWall", {
             size: 1,
             height: wallHeight,
-            width: wallWidth
+            width: 20
         });
         leftWall.position = new BABYLON.Vector3(
-            -(wallHeight / 2) - (wallWidth / 2),
+            -15,
             (wallHeight / 2) - (wallWidth / 2),
             0
         );
@@ -43,10 +43,10 @@ class Board {
         rightWall = BABYLON.MeshBuilder.CreateBox("RightWall", {
             size: 1,
             height: wallHeight,
-            width: wallWidth
+            width: 20
         });
         rightWall.position = new BABYLON.Vector3(
-            (wallHeight / 2) + (wallWidth / 2),
+            15,
             (wallHeight / 2) - (wallWidth / 2),
             0
         );
