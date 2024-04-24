@@ -1,8 +1,5 @@
 class Board {
 
-    /** @type {{ mesh: BABYLON.Mesh }[]} */
-    meshes = [];
-
     /** @type { BABYLON.TransformNode } */
     _root = null;
 
