@@ -7,4 +7,6 @@ window.onload = async (ev) => {
         document.getElementById('canvas')
     );
 
+    game.play();
+
 };
