@@ -1,30 +1,18 @@
+import * as BABYLON from 'babylonjs';
+import 'babylonjs-loaders';
+
+// Images for the skybox.
+import '../images/skybox/skybox_nz.jpg';
+import '../images/skybox/skybox_nx.jpg';
+import '../images/skybox/skybox_ny.jpg';
+import '../images/skybox/skybox_px.jpg';
+import '../images/skybox/skybox_py.jpg';
+import '../images/skybox/skybox_pz.jpg';
+
+// GLB files.
+import '../models/PlayerModel.glb';
+
 class Game {
-
-    /** @type HTMLCanvasElement */
-    _canvas = null;
-
-    /**
-     * @param canvas { HTMLCanvasElement }
-     */
-    constructor(canvas) {
-
-        this._canvas = canvas;
-        this._setCanvasSizeToParent();
-
-        // Resizes the canvas element to the parent
-        // when the browser changes size.
-        window.onresize = (ev) => {
-            this._setCanvasSizeToParent();
-        };
-
-    }
-
-    _setCanvasSizeToParent() {
-        const aspectRatio = 16 / 9;
-        const parentElement = this._canvas.parentElement;
-        this._canvas.width = parentElement.offsetWidth;
-        this._canvas.height = parentElement.offsetWidth / aspectRatio;
-    }
 
 }
 
