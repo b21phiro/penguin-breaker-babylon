@@ -5,18 +5,18 @@
     flex-direction: column;
 }
 
-.app-main {
+.app--main {
     flex: 1;
     padding-inline: var(--app-site-padding);
 }
 
-.app-header,
-.app-footer {
+.app--header,
+.app--footer {
     padding: var(--app-site-padding);
     text-align: center;
 }
 
 #app,
-.app-main {
+.app--main {
     display: flex;
 }

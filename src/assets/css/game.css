@@ -3,7 +3,7 @@
     flex: 1;
 }
 
-#PenguinBreakerCanvas {
+.game--canvas {
     position: absolute;
     inset: 0;
     background-color: black;
