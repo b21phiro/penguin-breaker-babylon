@@ -57,8 +57,10 @@ class Game {
     isLost = false;
     isWon = false;
 
+    score = 0;
+
     _brickColumns = 9;
-    _brickRows = 3;
+    _brickRows = 5;
     bricks = [];
 
     /** @param canvas { HTMLCanvasElement } */
@@ -167,6 +169,10 @@ class Game {
             this.isLost = true;
         }
 
+        if (this.bricks.length <= 0) {
+            this.isWon = true;
+        }
+
         if (!this.ballHasBeenShot) {
 
             // Stops if the player hits the right wall.
@@ -205,6 +211,15 @@ class Game {
             if (this.ball.mesh.intersectsMesh(this.player._getPaddleMesh(), false)) {
                 this.ball.speedY = this.ball.maxSpeed;
             }
+
+            // Hits a brick.
+            this.bricks.forEach(brick => {
+               if (this.ball.mesh.intersectsMesh(brick.mesh, false)) {
+                   this.score++;
+                   this.ball.speedY *= -1; // Reverse direction of the ball.
+                   this._removeBrick(brick);
+               }
+            });
 
             this.ball.mesh.position.y += this.ball.speedY;
             this.ball.mesh.position.x += this.ball.speedX;
@@ -355,6 +370,11 @@ class Game {
 
     _resetBricksArray() {
         this.bricks = [];
+    }
+
+    _removeBrick(brick) {
+        this.bricks = this.bricks.filter(_brick => _brick !== brick);
+        this.scene.removeMesh(brick.mesh);
     }
 
 }
