@@ -15,6 +15,8 @@ import '../models/PenguinBreakerGameScene.glb';
 import {Player} from "./player";
 import {Ball} from "./ball";
 import {Cave} from "./cave";
+import {Health} from "./health";
+import {Brick} from "./brick";
 
 class Game {
 
@@ -49,6 +51,16 @@ class Game {
 
     ballHasBeenShot = false;
 
+    /** @type Health */
+    health = null;
+
+    isLost = false;
+    isWon = false;
+
+    _brickColumns = 9;
+    _brickRows = 3;
+    bricks = [];
+
     /** @param canvas { HTMLCanvasElement } */
     constructor(canvas) {
 
@@ -57,6 +69,7 @@ class Game {
         this.player = new Player();
         this.ball = new Ball();
         this.cave = new Cave();
+        this.health = new Health();
 
         this.canvas = canvas;
         this._setCanvasSize();
@@ -78,7 +91,14 @@ class Game {
                 this.scene.registerBeforeRender(() => this.update());
 
                 // Ready
-                this.engine.runRenderLoop(() => this.scene.render());
+                this.engine.runRenderLoop(() => {
+                    if (this.isWon || this.isLost) {
+                        this.engine.stopRenderLoop();
+                        this.result()
+                    } else {
+                        this.scene.render()
+                    }
+                });
 
             })
             .catch(err => {
@@ -125,7 +145,27 @@ class Game {
         this.player.speedX = this.player.maxSpeed * -1;
     }
 
+    restartRound() {
+        this.ballHasBeenShot = false;
+        this._resetPositions();
+    }
+
+    result() {
+        if (this.isLost) {
+            alert("You suck!");
+        } else if (this.isWon)  {
+            alert("You won!");
+        } else {
+
+        }
+    }
+
     update() {
+
+        // Check if the player has lost.
+        if (this.health.hearts <= -1) {
+            this.isLost = true;
+        }
 
         if (!this.ballHasBeenShot) {
 
@@ -157,6 +197,8 @@ class Game {
             if (this.ball.getMinimumPosY() <= this.cave.getMinimumPosY()) {
                 this.ball.speedY = 0;
                 this.ball.speedX = 0;
+                this.health.subtract();
+                this.restartRound();
             }
 
             // Bounce on the paddle.
@@ -194,6 +236,8 @@ class Game {
 
         this._initSkybox();
 
+        this._initBricks();
+
         await this._initMeshesAsync();
 
     }
@@ -210,7 +254,6 @@ class Game {
         this.cave.setMeshNode(new BABYLON.TransformNode("Cave", this.scene));
 
         loaderResult.meshes.forEach(mesh => {
-            console.log(mesh.name);
             switch (mesh.name) {
                 case 'Ball':
                     this.ball.setMesh(mesh);
@@ -228,6 +271,10 @@ class Game {
                 default:
                     break;
             }
+        });
+
+        this.bricks.forEach(brick => {
+            brick.initMesh(this._brickRows, this._brickColumns);
         });
 
     }
@@ -288,6 +335,26 @@ class Game {
     _onResize(ev) {
         this._setCanvasSize();
         this.engine.resize();
+    }
+
+    _resetPositions() {
+        this.player.meshNode.position.x = 0;
+        this.ball.mesh.position.x = 0;
+        this.ball.mesh.position.y = 1;
+    }
+
+    _initBricks() {
+        this._resetBricksArray();
+        for (let row = 0; row < this._brickRows; row++) {
+            for (let column = 0; column < this._brickColumns; column++) {
+                let brick = new Brick(row, column, this.scene);
+                this.bricks.push(brick);
+            }
+        }
+    }
+
+    _resetBricksArray() {
+        this.bricks = [];
     }
 
 }

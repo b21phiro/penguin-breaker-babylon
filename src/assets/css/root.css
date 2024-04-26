@@ -1,4 +1,7 @@
 :root {
     --app-max-width: 120rem;
     --app-site-padding: clamp(1rem, 4.5vw, 2rem);
+
+    --stroke: #000;
+    --stroke-width: 2;
 }
