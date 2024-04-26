@@ -342,8 +342,20 @@ class Game {
     }
 
     _setCanvasSize() {
-        this.canvas.width = this.canvas.parentElement.offsetWidth;
-        this.canvas.height = this.canvas.parentElement.offsetWidth / (16/9);
+        const aspectRatio = 16/9;
+        const maxWidth = this.canvas.parentElement.offsetWidth;
+        const maxHeight = this.canvas.parentElement.offsetHeight;
+
+        let width = maxWidth;
+        let height = width / aspectRatio;
+
+        if (height > maxHeight) {
+            height = maxHeight;
+            width = height * aspectRatio;
+        }
+
+        this.canvas.width = width;
+        this.canvas.height = height;
     }
 
     /** @param ev { UIEvent } */
