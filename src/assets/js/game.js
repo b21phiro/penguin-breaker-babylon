@@ -18,6 +18,8 @@ import {Cave} from "./cave";
 import {Health} from "./health";
 import {Brick} from "./brick";
 
+import Stats from 'stats.js';
+
 class Game {
 
     /** @type HTMLCanvasElement */
@@ -63,6 +65,10 @@ class Game {
     _brickRows = 5;
     bricks = [];
 
+    /** @type Stats */
+    statsFpsPanel = null;
+    statsMsPanel = null;
+
     /** @param canvas { HTMLCanvasElement } */
     constructor(canvas) {
 
@@ -73,6 +79,9 @@ class Game {
         this.cave = new Cave();
         this.health = new Health();
 
+        this.statsFpsPanel = new Stats();
+        this.statsMsPanel = new Stats();
+
         this.canvas = canvas;
         this._setCanvasSize();
 
@@ -80,6 +89,16 @@ class Game {
 
         window.onresize = (ev) => this._onResize(ev);
 
+    }
+
+    showFps() {
+        this.statsFpsPanel.showPanel(0);
+        document.body.appendChild(this.statsFpsPanel.dom);
+    }
+
+    showMs() {
+        this.statsMsPanel.showPanel(1);
+        document.body.appendChild(this.statsMsPanel.dom);
     }
 
     play() {
@@ -94,12 +113,16 @@ class Game {
 
                 // Ready
                 this.engine.runRenderLoop(() => {
+                    this.statsMsPanel.begin();
+                    this.statsFpsPanel.begin();
                     if (this.isWon || this.isLost) {
                         this.engine.stopRenderLoop();
                         this.result()
                     } else {
                         this.scene.render()
                     }
+                    this.statsMsPanel.end();
+                    this.statsFpsPanel.end();
                 });
 
             })

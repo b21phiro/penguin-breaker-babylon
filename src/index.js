@@ -9,4 +9,7 @@ window.onload = async (ev) => {
 
     game.play();
 
+    game.showFps();
+    game.showMs();
+
 };
